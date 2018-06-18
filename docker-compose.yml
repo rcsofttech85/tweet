@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+    db:
+        env_file:
+          - .env
+        container_name: container_mysql
+        image: mysql:5.7
+        volumes:
+            - "./.data/db:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - "3306:3306"
+    redis:
+        container_name: container_redis
+        image: redis
+        ports:
+            - "6379:6379"
+        volumes:
+          - "./volumes/redis:/data"
+    php:
+        env_file:
+          - .env
+        container_name: container_phpfpm
+        build:
+            context: php7-fpm
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - ${SYMFONY_APP_PATH}:/var/www/symfony
+        links:
+            - redis
+    nginx:
+        env_file:
+          - .env
+        container_name: container_nginx
+        build:
+
+            context: nginx
+            args:
+                MAX_EXECUTION_TIME: ${MAX_EXECUTION_TIME}
+
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes_from:
+            - php
+        volumes:
+            - ./logs/nginx/:/var/log/nginx
+
+    phpmyadmin:
+        container_name: container_phpmyadmin
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - "8080:80"
+
