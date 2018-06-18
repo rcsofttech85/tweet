@@ -2,8 +2,46 @@
 
 {% block body %}
 
-{{ form_start(form,{attr:{'novalidate':'novalidate'}}) }}
-{{ form_widget(form) }}
-    <input type ='submit' value="Register" />
-{{ form_end(form) }}
+
+    <div class ="jumbotron">
+    {{ form_start(form,{attr:{'novalidate':'novalidate' ,'class':'form-horizontal'}}) }}
+
+
+    <div class="control-group">
+        <!-- Username -->
+        {{ form_label(form.username) }}
+        <div class="controls">
+            {{ form_widget(form.username) }}
+        </div>
+    </div>
+
+    <div class="control-group">
+        <!-- Username -->
+        {{ form_label(form.email) }}
+        <div class="controls">
+            {{ form_widget(form.email) }}
+        </div>
+    </div>
+
+    <div class="control-group">
+        <!-- Password -->
+
+        <div class="controls">
+            {{ form_widget(form.password) }}
+        </div>
+    </div>
+
+
+    <div class="control-group">
+        <!-- Button -->
+        <div class="controls">
+            <button class="btn btn-success">Register</button>
+        </div>
+    </div>
+
+
+    {{ form_end(form) }}
+    </div>
+
+
 {% endblock %}
